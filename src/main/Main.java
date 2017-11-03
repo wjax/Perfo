@@ -22,7 +22,7 @@ import bb.util.Benchmark;
 
 public class Main {
 
-	final static boolean GENERATE_TEST_STRINGS = false;
+	static boolean GENERATE_TEST_STRINGS = false;
 	
 	final static String ALPHABET = "abcdefghijklmnopqrstuvwz ";
 	
@@ -32,7 +32,7 @@ public class Main {
 	
 	static String messageFilePath;
 	static String soupFilePath;
-	final static String statisticsFilePath = "test/statistics.txt";
+	final static String statisticsFilePath = "result/statistics.txt";
 	
 	static Set<String> generatedTestFile;
 
@@ -43,34 +43,64 @@ public class Main {
 //		TESTS_SIZE.add(new int[]{10, 10_000_000});
 //		TESTS_SIZE.add(new int[]{10, 1_000_000});
 //		TESTS_SIZE.add(new int[]{10, 1_000});
-		TESTS_SIZE.add(new int[]{100, 10_000_000});
+//		TESTS_SIZE.add(new int[]{100, 10_000_000});
 //		TESTS_SIZE.add(new int[]{100, 1_000_000});
 //		TESTS_SIZE.add(new int[]{100, 1_000});
-		TESTS_SIZE.add(new int[]{100_000, 10_000_000});
+//		TESTS_SIZE.add(new int[]{100_000, 10_000_000});
 //		TESTS_SIZE.add(new int[]{10_000, 1_000_000});
 //		TESTS_SIZE.add(new int[]{10_000, 1_000});
-		
+
+		if (args.length == 0)
+		{
+			System.out.println("Usage: perfo -test=NUMBER SIZE_MSG SIZE_SOUP [[SIZE_MSG2 SIZE_SOUP2]...] [-generate SIZE_MSG SIZE_SOUP [[SIZE_MSG2 SIZE_SOUP2]...]]");
+			System.exit(1);
+		}
+		else if (((args.length-1) % 2) != 0) {
+			System.out.println("Error in params");
+			System.exit(1);
+		}
+
+		for (int i =1; i <= (args.length-1)/2; i++)
+		{
+			String sMSG = args[i];
+			String sSOUP = args[i+1];
+
+			int iMSG = Integer.parseInt(sMSG);
+			int iSOUP = Integer.parseInt(sSOUP);
+
+			TESTS_SIZE.add(new int[]{iMSG, iSOUP});
+		}
+
+		int test2Perform = 0;
+
+		if (args[0].contains("-test"))
+		{
+			GENERATE_TEST_STRINGS = false;
+			String[] binome = args[0].split("=");
+			test2Perform = Integer.parseInt(binome[1]);
+			if (test2Perform < 1 || test2Perform > 4)
+			{
+				System.out.println("Error in params");
+				System.exit(1);
+			}
+		}
+
+		else if (args[0].equals("-generate"))
+			GENERATE_TEST_STRINGS = true;
+		else
+		{
+			System.out.println("Error in params");
+			System.exit(1);
+		}
+
+
 		if (GENERATE_TEST_STRINGS)
 		{
 			GenerateTestStrings(TESTS_SIZE);
 			System.exit(0);
 		}
-		
-		// Read test number from console arguments. JVM need to be fresh for every single test
-		int test2Perform = 0;
-		if (args.length == 1) {
-		    try {
-		    	test2Perform = Integer.parseInt(args[0]);
-		    } catch (Exception e)
-		    {}
-		}
-		
-		if (test2Perform <= 0 || test2Perform > 4)
-		{
-			System.out.println("Invalid args. Argument has to be single number, 1..4");
-			System.exit(1);
-		}
-		
+
+
 		// Open Statistics file
 		PrintWriter writer = new PrintWriter (new FileWriter(statisticsFilePath, true));
 		writer.println(new Date().toString());

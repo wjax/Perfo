@@ -1,11 +1,11 @@
 @echo off
 ECHO Starting Performance Testing...
 ECHO IMPLEMENTATION 'ORIGINAL'
-java -jar perfo.jar 1
+java -jar perfo.jar -test=1 100 10000000 100000 10000000
 ECHO IMPLEMENTATION 'NOKEYCHAR'
-java -jar perfo.jar 2
+java -jar perfo.jar -test=2 100 10000000 100000 10000000
 ECHO IMPLEMENTATION 'NOMUTABLE'
-java -jar perfo.jar 3
+java -jar perfo.jar -test=3 100 10000000 100000 10000000
 ECHO IMPLEMENTATION 'NOKEYCHAR_NOMUTABLE'
-java -jar perfo.jar 4
+java -jar perfo.jar -test=4 100 10000000 100000 10000000
 pause
