@@ -22,6 +22,7 @@ import bb.util.Benchmark;
 
 public class Main {
 
+	// Modified in gen_string_cmdline branch
 	static boolean GENERATE_TEST_STRINGS = false;
 	
 	final static String ALPHABET = "abcdefghijklmnopqrstuvwz ";
